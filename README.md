@@ -6,6 +6,10 @@
 * Testing folder contains the testing source code
 * Bias Correction folder contains the source code for implementing bias correction
 
+### To download the data
+* CC359 - https://docs.google.com/forms/d/e/1FAIpQLSe5hfUkyZQAFGP2yFKxEjv8h0KbIXyAKIHffwXCuQJ5Y7SqRw/viewform
+* CAMCAN - 
+
 ### To train the model
 
 ```
