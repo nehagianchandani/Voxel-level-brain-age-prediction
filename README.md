@@ -1,7 +1,7 @@
 
 # A Multitask Deep Learning Model for Voxel-level Brain Age Gap Estimation
 
-## Source code structure:
+### Source code structure:
 * Main repo contains the files for training
 * Testing folder contains the testing source code with two csv (each for CC359 & Camcan) with test subjects id's (n=20 each)
 * Bias Correction folder contains the source code for implementing bias correction as well as two csv. The bias_removal_imgs.csv has n=10 samples that were used for creating the bins and testing_imgs.csv (same as cc359_test.csv in testing directory) has n=20 samples to be used for final testing. 
