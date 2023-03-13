@@ -48,8 +48,7 @@ def test_check1(test_loader, model, optimizer, scheduler, root_dir, path_to_chkp
 
     state = torch.load(path_to_chkpt)
     model.load_state_dict(state['state_dict'])
-    metric_mae = []
-    metric_object = DiceMetric(include_background=True, reduction="mean", get_not_nans=False)
+
     dir_name = str((path_to_chkpt.split('/')[-1]).split('.')[0])
     dir_name = 'camcan_1_' +(dir_name)
     path = os.path.join(root_dir,  dir_name)
@@ -66,11 +65,11 @@ def test_check1(test_loader, model, optimizer, scheduler, root_dir, path_to_chkp
         metric_dice = []
         for step, batch in enumerate(test_loader):
             if step <50:
-                img, brain_mask, tissue_mask, age = (batch["img"].cuda(), batch["brain_mask"].cuda(),
-                                                     batch["seg_label"].cuda(), batch["age_label"].cuda())
+                img, age = (batch["img"].cuda(), batch["age_label"].cuda())
                 print('--------------------------------------')
                 print(batch["img"].meta["filename_or_obj"][0], age)
-                brain_img = img * brain_mask
+                # brain_img = img * brain_mask
+                brain_img = img
 
                 bg_ch , f_ch, s_ch, t_ch, pred_glob_age, pred_vox_age = sliding_window_inference(inputs=brain_img, roi_size=(96,96,96), sw_batch_size=8, predictor=model_fun1, overlap=0.9, progress=False)
 
@@ -97,18 +96,6 @@ def test_check1(test_loader, model, optimizer, scheduler, root_dir, path_to_chkp
                 age_output = nib.Nifti1Image(age_output.cpu().numpy(), img1.affine, img1.header)
                 save = nib.save(age_output, str(sub_path) + str(age_name))
 
-                # save glob pad image
-                age_pad_name = '/age_pad_' + str(name)
-                img1 = nib.load(batch["img"].meta["filename_or_obj"][0])
-                gt = torch.full_like(pred_glob_age, 0, dtype=torch.float32)
-                for i in range(age.size(0)):
-                    gt[i,:,:,:,:] = age[i].item()
-
-                age_pad_output = torch.sub(pred_glob_age, gt, alpha=1)
-                age_pad_output = age_pad_output.squeeze(0).squeeze(0)
-                age_pad_output = nib.Nifti1Image(age_pad_output.cpu().numpy(), img1.affine, img1.header)
-                save = nib.save(age_pad_output, str(sub_path) + age_pad_name)
-
                 # save seg image
                 seg_name = '/seg_' + str(name)
                 img1 = nib.load(batch["img"].meta["filename_or_obj"][0])
@@ -116,26 +103,8 @@ def test_check1(test_loader, model, optimizer, scheduler, root_dir, path_to_chkp
                 save = nib.save(seg_output, str(sub_path) + seg_name)
 
 
-                gt_seg_name = '/gt_seg_' + str(name)
-                img1 = nib.load(batch["img"].meta["filename_or_obj"][0])
-                seg_gt = nib.Nifti1Image(tissue_mask.cpu().numpy().squeeze(axis=0).squeeze(axis=0), img1.affine, img1.header)
-                save = nib.save(seg_gt, str(sub_path) + str(gt_seg_name))
-
-                pred_seg = [post_predseg(i) for i in decollate_batch(pred_seg)]
-                pred_seg = pad_list_data_collate(pred_seg)
-
-                tissue_mask = [post_predseg(i) for i in decollate_batch(tissue_mask)]
-                tissue_mask = pad_list_data_collate(tissue_mask)
-
-
-
-                print('dice channel wise', metric_object(y_pred=pred_seg, y=tissue_mask))
-                mean_dice_val = metric_object.aggregate().item()
-                print('dice ', mean_dice_val )
-                metric_dice.append(mean_dice_val)
-
-
                 # save voxel age image
+                brain_mask = torch.where(brain_img > 0, 1, 0)
                 brain_pad_mask, mae_voxel = create_pad_mask(pred_vox_age, age, brain_mask)
                 print('voxel error avg for one img', mae_voxel.item())
                 age_name = '/vox_age_pad_' + str(name)
@@ -153,7 +122,7 @@ def test_check1(test_loader, model, optimizer, scheduler, root_dir, path_to_chkp
                 save = nib.save(orig_save, str(sub_path) + orig_name)
         print('--------------------------')
         print('avg voxel error on test set ', np.mean(voxel_error))
-        print('avg dice error on test set ', np.mean(metric_dice))
+
 
 
 

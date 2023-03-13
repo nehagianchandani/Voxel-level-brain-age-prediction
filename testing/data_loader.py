@@ -27,10 +27,10 @@ import os
 
 test_transforms = Compose(
     [
-        LoadImaged(keys=["img", "seg_label", "brain_mask"]),
+        LoadImaged(keys=["img"]),
         # AddChanneld("img", "label"),
-        EnsureChannelFirstd(keys=["img", "seg_label", "brain_mask"]),
-        DivisiblePadd(["img", "seg_label", "brain_mask"], 16),
+        EnsureChannelFirstd(keys=["img"]),
+        DivisiblePadd(["img",], 16),
         # Orientationd(keys=["image", "label"], axcodes="RAS"),
         ScaleIntensityd(
             keys=["img"],
@@ -45,22 +45,23 @@ test_transforms = Compose(
 
 def load_data_test(t1w_csv, seg_mask_csv, age_csv_path, brain_mask_csv, batch, root_dir):
 
-    file_name = "shuff_files_1.csv"
+    #testing on CC359
+    # testing on CAMCAN
+    file_name = "cc359_test.csv"
     files = os.path.join(root_dir, file_name)
     shuff_data = pd.read_csv(files)
     imgs_list = list(shuff_data['imgs'])
-    seg_labels = list(shuff_data['seg'])
-    mask_dir = list(shuff_data['mask'])
     age_labels = list(shuff_data['age'])
-    imgs_list = imgs_list[329:]
-    seg_labels = seg_labels[329:]
-    mask_dir = mask_dir[329:]
-    age_labels = age_labels[329:]
 
+    """#testing on CAMCAN
+    file_name = "camcan_test.csv"
+    files = os.path.join(root_dir, file_name)
+    shuff_data = pd.read_csv(files)
+    imgs_list = list(shuff_data['imgs'])
+    age_labels = list(shuff_data['age'])"""
 
-    filenames_test = [{"img": x, "seg_label": y, "age_label": z, 'brain_mask': b} for (x, y, z, b) in
-                      zip(imgs_list, seg_labels, age_labels, mask_dir)]
-
+    filenames_test = [{"img": x, "age_label": z} for (x, z) in
+                      zip(imgs_list, age_labels)]
 
     # print('filenames train', filenames_train)
     ds_test = monai.data.Dataset(filenames_test, test_transforms)
