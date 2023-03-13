@@ -46,7 +46,7 @@ test_transforms = Compose(
 def load_data_test(t1w_csv, seg_mask_csv, age_csv_path, brain_mask_csv, batch, root_dir):
 
     #testing on CC359
-    # testing on CAMCAN
+    
     file_name = "cc359_test.csv"
     files = os.path.join(root_dir, file_name)
     shuff_data = pd.read_csv(files)
