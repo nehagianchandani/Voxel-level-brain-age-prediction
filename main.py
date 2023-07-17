@@ -44,10 +44,9 @@ if __name__ == "__main__":
     
     # Defining our optimizer and scheduler
     # proposed model uses betas (0.5, 0.999)
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5, betas=(0.5, 0.999))
 
-    #ablation experiment models use default betas -- no need to define explicitly, uncomment the following when training ablation models.
-    #optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
+    #ablation experiment models use default betas -- no need to define explicitly
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=1e-5)
     
     # #after how many steps (in my case used for epochs) to change lr - step_size
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=70, gamma=0.6)
