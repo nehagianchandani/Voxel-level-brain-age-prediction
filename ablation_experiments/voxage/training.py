@@ -32,27 +32,17 @@ def train(train_loader, val_loader, model, optimizer, scheduler, max_epochs, roo
     
         print("Epoch ", epoch)
         print("Train:", end ="")
-        if epoch < 50:
-            glob_coef = 1
-            vox_coef = 1
-        elif (epoch >=50) and (epoch<100):
-            glob_coef = 0.8
-            vox_coef =1.2
-        else:
-            glob_coef = 0.6
-            vox_coef =1.4
-
         for step, batch in enumerate(train_loader):
             img, brain_mask, tissue_mask, age = (batch["img"].cuda(), batch["brain_mask"].cuda(),
-                                            batch["seg_label"].cuda(), batch["age_label"].cuda())
+                                                 batch["seg_label"].cuda(), batch["age_label"].cuda())
 
-            brain_img = img*brain_mask
-       
+            brain_img = img * brain_mask
+
             optimizer.zero_grad()
 
-            pred_tissue_mask, pred_glob_age, pred_voxel_age = model(brain_img)
+            pred_vox_age = model(brain_img)
 
-            loss = glob_coef*(global_mae_loss(pred_glob_age, age, brain_mask)) + vox_coef*(voxel_mae(pred_vox_age, age, root_dir, brain_mask))
+            loss = voxel_mae(pred_vox_age, age, root_dir, brain_mask)
             loss.backward()
             train_loss += loss.item()
             optimizer.step()
@@ -64,46 +54,39 @@ def train(train_loader, val_loader, model, optimizer, scheduler, max_epochs, roo
         print()
         print("Val:", end ="")
         with torch.no_grad():
-                glob_mae_loss=0.0
-                vox_mae_loss = 0.0
                 for step, batch in enumerate(val_loader):
                     img, brain_mask, tissue_mask, age = (batch["img"].cuda(), batch["brain_mask"].cuda(),
-                                            batch["seg_label"].cuda(), batch["age_label"].cuda())
-                    brain_img = img*brain_mask
+                                                         batch["seg_label"].cuda(), batch["age_label"].cuda())
 
-                    pred_glob_age, pred_vox_age = model(brain_img)
+                    brain_img = img * brain_mask
 
-                    loss = glob_coef * (global_mae_loss(pred_glob_age, age, brain_mask)) + vox_coef*(voxel_mae(pred_vox_age, age, root_dir, brain_mask))
+                    pred_vox_age = model(brain_img)
+
+                    loss = voxel_mae(pred_vox_age, age, root_dir, brain_mask)
                     val_loss += loss.item()
-
-                    glob_mae_loss += global_mae_loss(pred_glob_age, age, brain_mask)
-                    vox_mae_loss += voxel_mae(pred_vox_age, age, root_dir, brain_mask)
-
                     print("=", end = "")
+
                 print()
                 val_loss = val_loss/(step+1)
-                glob_mae_loss = glob_mae_loss/ (step+1)
-                vox_mae_loss = vox_mae_loss/ (step+1)
-
-
-        print("Training epoch ", epoch, ", train loss:", train_loss, ", val loss:", val_loss, ", val glob mae:", glob_mae_loss.item(), ", val vox mae:", vox_mae_loss.item())
+        print("Training epoch ", epoch, ", train loss:", train_loss, ", val loss:", val_loss, ", val vox mae :", val_loss)
         wandb.log({"train_loss": train_loss})
         wandb.log({"val_loss": val_loss})
-        wandb.log({"val_glob_mae": glob_mae_loss.item()})
-        wandb.log({"val_vox_mae": vox_mae_loss.item()})
+        wandb.log({"val_vox_mae": val_loss})
         if epoch == 1:
             best_val_loss = val_loss
 
-
         if val_loss < best_val_loss:
-            print("Saving model")
             best_val_loss = val_loss
+            print("Saving model")
             state = {
                 'epoch': epoch,
                 'state_dict': model.state_dict(),
                 'optimizer': optimizer.state_dict()
             }
-            torch.save(state, root_dir + "/globage_voxage.pth")
-        scheduler.step()
-        wandb.log({"epoch": epoch})
+            torch.save(state, root_dir + "/vox_age.pth")
+
+    print('-----------------------')
+    print('best loss ', best_val_loss)
+    scheduler.step()
+    wandb.log({"epoch": epoch})
     return
