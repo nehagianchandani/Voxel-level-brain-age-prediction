@@ -1,6 +1,7 @@
 
 # A Multitask Deep Learning Model for Voxel-level Brain Age Estimation
-
+### Model Architecture
+![Proposed Model Architecture](figs/proposed_model_architecture.png)
 #### Source code structure:
 * Main repo contains the files for training
 * Testing folder contains the testing source code with a csv for CC359 testing subjects, the data-loader in the testing directory can be used to obtain the CamCAN testing subjects using shuff_files_camcan.csv.
