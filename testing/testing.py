@@ -71,7 +71,7 @@ def test_check1(test_loader, model, optimizer, scheduler, root_dir, path_to_chkp
                 # brain_img = img * brain_mask
                 brain_img = img
 
-                bg_ch , f_ch, s_ch, t_ch, pred_glob_age, pred_vox_age = sliding_window_inference(inputs=brain_img, roi_size=(96,96,96), sw_batch_size=8, predictor=model_fun1, overlap=0.9, progress=False)
+                bg_ch , f_ch, s_ch, t_ch, pred_glob_age, pred_vox_age = sliding_window_inference(inputs=brain_img, roi_size=(128,128,128), sw_batch_size=8, predictor=model_fun1, overlap=0.9, progress=False)
 
                 pred_seg = torch.cat((bg_ch, f_ch, s_ch, t_ch), dim=1)
 
