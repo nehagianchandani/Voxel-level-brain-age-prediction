@@ -45,15 +45,9 @@ train_transforms = Compose(
             keep_size=True,
             mode="nearest"
         ),
-        #RandSpatialCropSamplesd(
-        #    keys=["img","seg_label", "brain_mask"],
-        #    roi_size=(64,64,64),
-        #    num_samples= 1,
-        #    random_size=False
-        #)
         RandCropByPosNegLabeld(
             keys=["img","seg_label", "brain_mask"],
-            spatial_size=(96, 96, 96),
+            spatial_size=(128,128,128),
             label_key="brain_mask",
             pos = 0.7,
             neg=0.3,
@@ -61,8 +55,6 @@ train_transforms = Compose(
             image_key="img",
             image_threshold=-0.1
         )
-
-        # RandGibbsNoised(keys=["img", "label"], prob = 0.2)
     ]
 )
 val_transforms = Compose(
@@ -84,15 +76,9 @@ val_transforms = Compose(
             keep_size=True,
             mode="nearest"
         ),
-        #RandSpatialCropSamplesd(
-        #    keys=["img", "seg_label", "brain_mask"],
-        #    roi_size=(64, 64, 64),
-        #    num_samples=1,
-        #    random_size=False
-        #)
         RandCropByPosNegLabeld(
             keys=["img","seg_label", "brain_mask"],
-            spatial_size=(96, 96, 96),
+            spatial_size=(128,128,128),
             label_key="brain_mask",
             pos = 0.7,
             neg=0.3,
@@ -100,61 +86,29 @@ val_transforms = Compose(
             image_key="img",
             image_threshold=-0.1
         )
-
-        # RandGibbsNoised(keys=["img", "label"], prob = 0.2)
     ]
 )
 
 
 def load_data(t1w_csv, seg_mask_csv, age_csv_path, brain_mask_csv, batch, root_dir):
-
-
-    #t1w = pd.read_csv(t1w_csv)
-    #tissue = pd.read_csv(seg_mask_csv)
-    #brain = pd.read_csv(brain_mask_csv)
-    #age = pd.read_csv(age_csv_path)
-    #print(t1w.shape, tissue.shape, brain.shape, age.shape)
-    #imgs_list = list(t1w['filename'])
-    #seg_labels = list(tissue['filename'])
-    #mask_dir = list(brain['filename'])
-    #age_labels = list(age['age'])
-
-    #imgs_list = imgs_list[1155:1514]
-    #seg_labels = seg_labels[1155:1514]
-    #mask_dir = mask_dir[1155:1514]
-    #age_labels = age_labels[1155:1514]
-
-    #fixed_seed = rd.random()
-    #print('random shuffle seed', fixed_seed)
-    #rd.Random(fixed_seed).shuffle(imgs_list)
-    #rd.Random(fixed_seed).shuffle(seg_labels)
-    #rd.Random(fixed_seed).shuffle(mask_dir)
-    #rd.Random(fixed_seed).shuffle(age_labels)
-
-    #shuff_dict = {'imgs': imgs_list, 'seg': seg_labels, 'mask': mask_dir, 'age': age_labels}
-    #shuff_df = pd.DataFrame(shuff_dict)
-    #shuff_df.to_csv(root_dir + "shuff_files.csv", encoding='utf-8', index=False)
-
-
-
-
-    #add path to csv with paths of all data inputs
-    shuff_data = pd.read_csv(root_dir + "shuff_files_1.csv")
+    #TODO: Add correct path to the csv with input file names and paths
+    shuff_data = pd.read_csv(root_dir + "shuff_files_camcan.csv")
     imgs_list = list(shuff_data['imgs'])
     seg_labels = list(shuff_data['seg'])
     mask_dir = list(shuff_data['mask'])
     age_labels = list(shuff_data['age'])
-
-    imgs_list = imgs_list[0:329]
-    seg_labels = seg_labels[0:329]
-    mask_dir = mask_dir[0:329]
-    age_labels = age_labels[0:329]
-
+    
 
     length = len(imgs_list)
     print(length)
-    first = int(0.75*length)
+    test = int(0.85*length)
 
+    imgs_list = imgs_list[:test]
+    seg_labels = seg_labels[:test]
+    mask_dir = mask_dir[:test]
+    age_labels = age_labels[:test]
+
+    first = int(0.75*length)
 
     imgs_list_train = imgs_list[0:first]
     imgs_list_val = imgs_list[first:]
@@ -169,7 +123,6 @@ def load_data(t1w_csv, seg_mask_csv, age_csv_path, brain_mask_csv, batch, root_d
     print('val set', len(imgs_list_val), len(seg_labels_val), len(mask_dir_val), len(age_labels_val))
 
     filenames_train = [{"img": x, "seg_label": y, "age_label": z, 'brain_mask': b} for (x,y,z,b) in zip(imgs_list_train, seg_labels_train, age_labels_train, mask_dir_train)]
-    #filenames_train = [{"img": x, "seg_label": y, 'brain_mask': b} for (x,y,b) in zip(imgs_list_train, seg_labels_train, mask_dir_train)]
 
 
     ds_train = monai.data.Dataset(filenames_train, train_transforms)
