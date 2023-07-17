@@ -37,15 +37,15 @@ def train(train_loader, val_loader, model, optimizer, scheduler, max_epochs, roo
             glob_coef = 1
             voxel_coef = 1
 
-        elif epoch >= 50 and epoch < 200:
-            dice_coef = 10
-            glob_coef = 0.5
-            voxel_coef = 1.5
+        elif epoch >= 50 and epoch < 130:
+            dice_coef = 40
+            glob_coef = 1
+            voxel_coef = 1
 
         else:
-            dice_coef = 5
-            glob_coef = 0.5
-            voxel_coef = 1.5
+            dice_coef = 15
+            glob_coef = 0.7
+            voxel_coef = 1.3
 
 
         for step, batch in enumerate(train_loader):
@@ -95,17 +95,7 @@ def train(train_loader, val_loader, model, optimizer, scheduler, max_epochs, roo
                 metric_object.reset()
                 mae_loss = mae_loss/ (step+1)
                 voxel_mae_loss = voxel_mae_loss / (step + 1)
-                #print(mae_loss)
-        if epoch % 50 == 0:
-                img = img.cpu()
-                pred_tissue_mask = pred_tissue_mask.cpu()
-                plt.figure()
-                plt.subplot(121)
-                plt.imshow(img.numpy()[0,0,32,:,:], cmap = "gray")
-                plt.subplot(122)
-                plt.imshow(img.numpy()[0,0,32,:,:], cmap = "gray")
-                plt.imshow(np.argmax(pred_tissue_mask.numpy(),axis = 1)[0,32,:,:], alpha = 0.4)
-                plt.savefig("./Figs1/CC359_val_sample_epoch_" + str(epoch) + ".png")
+
 
         print("Training epoch ", epoch, ", train loss:", train_loss, ", val loss:", val_loss, ", val dice score:", dice_metric, ", val glob mae:", mae_loss.item(), ", val voxel mae:", voxel_mae_loss.item(), " | ", optimizer.param_groups[0]['lr'])
         wandb.log({"train_loss": train_loss})
