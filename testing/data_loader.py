@@ -47,18 +47,19 @@ def load_data_test(t1w_csv, seg_mask_csv, age_csv_path, brain_mask_csv, batch, r
 
     #testing on CC359
     
-    file_name = "cc359_test.csv"
+    file_name = "shuff_file_camcan.csv"
     files = os.path.join(root_dir, file_name)
     shuff_data = pd.read_csv(files)
     imgs_list = list(shuff_data['imgs'])
     age_labels = list(shuff_data['age'])
 
-    """#testing on CAMCAN
-    file_name = "camcan_test.csv"
-    files = os.path.join(root_dir, file_name)
-    shuff_data = pd.read_csv(files)
-    imgs_list = list(shuff_data['imgs'])
-    age_labels = list(shuff_data['age'])"""
+    #only for camcan
+    length = len(imgs_list)
+    print(length)
+    test = int(0.85*length)
+
+    imgs_list = imgs_list[test:]
+    age_labels = age_labels[test:]
 
     filenames_test = [{"img": x, "age_label": z} for (x, z) in
                       zip(imgs_list, age_labels)]
