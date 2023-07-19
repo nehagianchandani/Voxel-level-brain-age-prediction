@@ -94,7 +94,8 @@ class build_unet(nn.Module):
         self.glob_age = nn.Conv3d(1024, 1, kernel_size=1, padding=0)
         self.flat = nn.Flatten()
         #self.linear = nn.Linear(64, 1)
-        self.linear = nn.Linear(216, 1)  # 96 input size
+        #self.linear = nn.Linear(216, 1)  # 96 input size
+        self.linear = nn.Linear(512, 1)  # 128 input size
 
         self.relu = nn.ReLU()
 
