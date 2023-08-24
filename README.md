@@ -2,7 +2,7 @@
 # A Multitask Deep Learning Model for Voxel-level Brain Age Estimation
 ### Model Architecture
 
-This is the official repository for the paper titled 'A Multitask Deep Learning Model for Voxel-level Brain Age Estimation'.
+This is the official repository for the paper titled 'A Multitask Deep Learning Model for Voxel-level Brain Age Estimation'.  
 Status: Accepted at MLMI workshop @ MICCAI 2023.
 
 ![Proposed Model Architecture](figs/proposed_model_architecture.png)
