@@ -5,7 +5,7 @@
 This is the official repository for the paper titled 'A Multitask Deep Learning Model for Voxel-level Brain Age Estimation'.  
 Status: Accepted at MLMI workshop @ MICCAI 2023.
 
-$\textcolor{red} {\textsf{It is highly recommended to go through all code and csv files before running any scripts and replacing any placeholders (XXXX) with appropriate paths.}} $ 
+$\textcolor{red} {\text{It is highly recommended to go through all code and csv files before running any scripts and replacing any placeholders (XXXX) with appropriate paths.}} $ 
 
 ![Proposed Model Architecture](figs/proposed_model_architecture.png)
 #### Source code structure:
