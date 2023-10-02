@@ -1,6 +1,7 @@
 ## Contribution 3 - Regional Analysis of voxel-level brain age
 
-$\textcolor{red} {\textsf{It is highly recommended to go through all code and csv files before running any scripts and replacing any placeholders (XXXX) with appropriate paths.}} $ 
+
+_**It is highly recommended to go through all code and csv files before running any scripts and replacing any placeholders (XXXX) with appropriate paths.**_
 
 #### Directory structure:
 * MNI-maxprob-thr50-1mm.nii.gz - MNI regional atlas (9 regions)
