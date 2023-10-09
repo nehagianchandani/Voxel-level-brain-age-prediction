@@ -7,7 +7,7 @@ Status: Accepted at MLMI workshop @ MICCAI 2023.
 
 _**It is highly recommended to go through all code and replace any placeholders (XXXX) with appropriate paths.**_
 
-![Proposed Model Architecture](figs/proposed_model_architecture.png)
+![Proposed Model Architecture](figs/thesis-proposed_model.png)
 #### Source code structure:
 * Main repo contains the files for training
 * Testing folder contains the testing source code with a csv for CC359 testing subjects, the data-loader in the testing directory can be used to obtain the CamCAN testing subjects using shuff_files_camcan.csv.
