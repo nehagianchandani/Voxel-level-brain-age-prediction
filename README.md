@@ -3,7 +3,34 @@
 ### Model Architecture
 
 This is the official repository for the paper titled 'A Multitask Deep Learning Model for Voxel-level Brain Age Estimation'.  
-Status: Accepted at MLMI workshop @ MICCAI 2023.
+Status: Contribution 1 - Presented at MLMI workshop @ MICCAI 2023. Published in Springer. 
+Contribution 1-4 - Published in MELBA
+
+Citations (bib) as follows:
+
+* @inproceedings{gianchandani2023multitask,
+  title={A multitask deep learning model for voxel-level brain age estimation},  
+  author={Gianchandani, Neha and Ospel, Johanna and MacDonald, Ethan and Souza, Roberto},  
+  booktitle={International Workshop on Machine Learning in Medical Imaging},  
+  pages={283--292},  
+  year={2023},  
+  organization={Springer}  
+  }
+* @article{melba:2024:007:gianchandani,  
+    title = "A voxel-level approach to brain age prediction: A method to assess regional brain aging",  
+    author = "Gianchandani, Neha and Dibaji, Mahsa and Ospel, Johanna and Vega, Fernando and Bento, Mariana and MacDonald, M. Ethan and Souza, Roberto",  
+    journal = "Machine Learning for Biomedical Imaging",  
+    volume = "2",  
+    issue = "April 2024 issue",  
+    year = "2024",  
+    pages = "761--795",  
+    issn = "2766-905X",  
+    doi = "https://doi.org/10.59275/j.melba.2024-4dg2",  
+    url = "https://melba-journal.org/2024:007"  
+}
+
+
+
 
 _**It is highly recommended to go through all code and replace any placeholders (XXXX) with appropriate paths.**_
 
