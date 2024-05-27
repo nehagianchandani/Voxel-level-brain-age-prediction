@@ -46,8 +46,8 @@ python main_test.py --root_dir #add root directory# --checkpoint_path #add path 
 
 
 ## Citations (bib) as follows:
-
-* @inproceedings{gianchandani2023multitask,
+```
+@inproceedings{gianchandani2023multitask,
   title={A multitask deep learning model for voxel-level brain age estimation},  
   author={Gianchandani, Neha and Ospel, Johanna and MacDonald, Ethan and Souza, Roberto},  
   booktitle={International Workshop on Machine Learning in Medical Imaging},  
@@ -55,7 +55,9 @@ python main_test.py --root_dir #add root directory# --checkpoint_path #add path 
   year={2023},  
   organization={Springer}  
   }
-* @article{melba:2024:007:gianchandani,  
+```
+```
+@article{melba:2024:007:gianchandani,  
     title = "A voxel-level approach to brain age prediction: A method to assess regional brain aging",  
     author = "Gianchandani, Neha and Dibaji, Mahsa and Ospel, Johanna and Vega, Fernando and Bento, Mariana and MacDonald, M. Ethan and Souza, Roberto",  
     journal = "Machine Learning for Biomedical Imaging",  
@@ -67,3 +69,4 @@ python main_test.py --root_dir #add root directory# --checkpoint_path #add path 
     doi = "https://doi.org/10.59275/j.melba.2024-4dg2",  
     url = "https://melba-journal.org/2024:007"  
 }
+```
